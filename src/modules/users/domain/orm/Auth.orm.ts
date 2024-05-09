@@ -7,8 +7,8 @@ import { IUser } from '../interfaces/IUser.interface';
 
 export const logIn = async (authData: IAuth): Promise<string | null> => {
   try {
-    // Buscar el usuario por el username
-    const user = await User.findOne({ username: authData.username });
+    // Buscar el usuario por el email
+    const user = await User.findOne({ email: authData.email });
     if (!user) {
       return null; // Usuario no encontrado
     }
@@ -42,7 +42,8 @@ export const registerUser = async (userData: IUser): Promise<IUser> => {
     username: userData.username,
     password: hashedPassword,
     email: userData.email,
-    address: userData.address
+    address: userData.address,
+    telephone: userData.telephone
   });
 
   return await user.save();
