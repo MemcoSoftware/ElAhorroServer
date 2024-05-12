@@ -5,4 +5,5 @@ export interface IProduct extends Document {
   description: string;
   reference: string;
   category: string;
+  price: number;
 }

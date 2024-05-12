@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 import { IProveedor } from '../interfaces/IProveedor.interface';
 
 const proveedorSchema = new Schema<IProveedor>({
@@ -7,6 +7,6 @@ const proveedorSchema = new Schema<IProveedor>({
   telefono: { type: String, required: true },
 });
 
-const Proveedor = model<IProveedor>('Proveedores', proveedorSchema);
+const Proveedor = models.Proveedores || model<IProveedor>('Proveedores', proveedorSchema);
 
 export default Proveedor;

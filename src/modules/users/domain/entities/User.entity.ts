@@ -1,5 +1,4 @@
-// User.entity.ts
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 import { IUser } from '../interfaces/IUser.interface';
 
 const userSchema = new Schema<IUser>({
@@ -10,6 +9,6 @@ const userSchema = new Schema<IUser>({
   telephone: { type: String, required: true },
 });
 
-const User = model<IUser>('User', userSchema);
+const User = models.User || model<IUser>('User', userSchema);
 
 export default User;
