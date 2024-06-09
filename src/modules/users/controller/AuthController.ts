@@ -1,27 +1,29 @@
-
 import { Request, Response } from 'express';
-import * as AuthOrm from '../domain/orm/Auth.orm'; // Importamos las funciones ORM de autenticación
-import nodemailer from 'nodemailer'; // Importamos nodemailer para posibles funcionalidades de envío de correos
+import * as AuthOrm from '../domain/orm/Auth.orm';
+import nodemailer from 'nodemailer';
 
 // Función para manejar el inicio de sesión
 export const login = async (req: Request, res: Response) => {
   try {
-    // Intenta obtener un token usando las credenciales proporcionadas en el cuerpo de la solicitud
     const token = await AuthOrm.logIn(req.body);
     if (!token) {
-      // Si no se obtiene un token, la autenticación ha fallado
       return res.status(401).json({ message: 'Authentication failed' });
     }
-    // Si la autenticación es exitosa, responde con el token y un mensaje de éxito
-    res.json({
-      message: 'Login successful',
-      token: token
+    
+    // Configurar la cookie `HttpOnly` para el token
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Asegúrate de que la cookie solo se envíe por HTTPS en producción
+      sameSite: 'strict', // Corrige la capitalización de 'Strict' a 'strict'
+      maxAge: 24 * 60 * 60 * 1000 // Opcional: Configura la expiración de la cookie (1 día en este caso)
     });
+    
+    res.json({ message: 'Login successful' });
   } catch (error: any) {
-    // Manejo de errores del servidor
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Función para manejar el registro de nuevos usuarios
 export const registerUser = async (req: Request, res: Response) => {
